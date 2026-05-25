@@ -1,0 +1,48 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+*.egg-info/
+
+# Django
+db.sqlite3-journal
+staticfiles/
+media/auto_screenshots/
+
+# Node
+node_modules/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# OS / временные файлы
+.DS_Store
+Thumbs.db
+*.bkp
+*~
+
+# Flutter
+booktrail_mobile/.dart_tool/
+booktrail_mobile/.flutter-plugins
+booktrail_mobile/.flutter-plugins-dependencies
+booktrail_mobile/build/
+booktrail_mobile/.idea/
+booktrail_mobile/android/.gradle/
+booktrail_mobile/android/local.properties
+booktrail_mobile/android/app/build/
+booktrail_mobile/ios/Pods/
+booktrail_mobile/ios/.symlinks/
+booktrail_mobile/ios/Flutter/Flutter.framework
+booktrail_mobile/ios/Flutter/Flutter.podspec
+
+# Env
+.env
+.env.local
+
+# Внутренняя документация (не для публичного репозитория)
+docs/

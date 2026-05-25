@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Рекомендации — BookTrail{% endblock %}
+{% block content %}
+<section class="section compact-top">
+    <div class="section-heading">
+        <span class="eyebrow">Рекомендации</span>
+        <h1>Персональная витрина на основе маршрутов, тем и отзывов.</h1>
+    </div>
+    <div class="card-grid recommendation-grid">
+        {% for recommendation in recommendations %}
+            {% include 'partials/_recommendation_card.html' with recommendation=recommendation %}
+        {% endfor %}
+    </div>
+</section>
+
+{% endblock %}

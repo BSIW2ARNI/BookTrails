@@ -1,0 +1,21 @@
+<article class="surface-card notification-item {% if not notification.read %}unread{% endif %}">
+    <div>
+        <div class="notification-top">
+            <span class="event-type">{{ notification.type }}</span>
+            <span class="status-pill {% if notification.read %}muted-pill{% else %}success{% endif %}">{% if notification.read %}Прочитано{% else %}Не прочитано{% endif %}</span>
+        </div>
+        <h3>{{ notification.title }}</h3>
+        <p>{{ notification.text }}</p>
+    </div>
+    <div class="notification-actions">
+        <span class="muted">{{ notification.created_at }}</span>
+        {% if not notification.read %}
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="mark_read">
+            <input type="hidden" name="notification_id" value="{{ notification.id }}">
+            <button class="btn btn-ghost" type="submit">Прочитано</button>
+        </form>
+        {% endif %}
+    </div>
+</article>

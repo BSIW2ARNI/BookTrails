@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ book.title }} — BookTrail{% endblock %}
+{% block content %}
+<section class="section compact-top">
+    <div class="detail-layout">
+        <article class="surface-card book-hero-card">
+            <div class="book-cover-wrap accent-{{ book.accent }}">
+                <img src="{% static book.cover %}" alt="Обложка {{ book.title }}">
+            </div>
+            <div class="book-hero-content">
+                <span class="eyebrow">Карточка книги</span>
+                <h1>{{ book.title }}</h1>
+                <p class="meta-line">{{ book.author_names|join:', ' }} · {{ book.genre.name|default:'' }} · {{ book.language.name|default:'' }} · {{ book.year }}</p>
+                <p>{{ book.description }}</p>
+                <div class="rating-row">
+                    <span class="rating-pill">★ {{ book.rating }}</span>
+                    <span class="muted">Средняя оценка по отзывам BookTrail</span>
+                </div>
+                <div class="copy-list-inline">
+                    {% for copy in copies %}
+                    <a class="btn btn-secondary" href="{% url 'web:copy_detail' copy.id %}">Экземпляр {{ copy.copy_code }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+        </article>
+        <aside class="surface-card side-note-card">
+            <span class="eyebrow">Контекст маршрута</span>
+            <h3>Почему книгу замечают</h3>
+            <p>Книгу часто берут в городские сообщества, где важно обсуждение заметок, событий и следов на полях.</p>
+            <div class="side-metrics">
+                <div><strong>{{ reviews|length }}</strong><span>отзывов</span></div>
+                <div><strong>{{ copies|length }}</strong><span>экземпляра в сети</span></div>
+            </div>
+        </aside>
+    </div>
+</section>
+
+<section class="section two-column-section" id="reviews">
+    <div>
+        <div class="section-heading inline-heading">
+            <div>
+                <span class="eyebrow">Отзывы</span>
+                <h2>Что пишут читатели</h2>
+            </div>
+        </div>
+        <div class="surface-card form-card">
+            {% if request.user.is_authenticated %}
+            <form class="stacked-form" method="post" novalidate>
+                {% csrf_token %}
+                <input type="hidden" name="action" value="save_review">
+                {% if review_form.non_field_errors %}
+                <div class="form-errors">
+                    {% for error in review_form.non_field_errors %}
+                    <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <label class="input-group">
+                    <span>{{ review_form.rating.label }}</span>
+                    {{ review_form.rating }}
+                    {% for error in review_form.rating.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+                </label>
+                <label class="input-group">
+                    <span>{{ review_form.text.label }}</span>
+                    {{ review_form.text }}
+                    {% for error in review_form.text.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+                </label>
+                <div class="hero-actions">
+                    <button class="btn btn-primary" type="submit">{% if user_review %}Обновить отзыв{% else %}Оставить отзыв{% endif %}</button>
+                    {% if user_review %}
+                    <button class="btn btn-danger" type="submit" name="action" value="delete_review">Удалить отзыв</button>
+                    {% endif %}
+                </div>
+            </form>
+            {% else %}
+            <p class="muted">Чтобы оставить отзыв, войдите в аккаунт.</p>
+            <a class="btn btn-primary" href="{% url 'web:auth_login' %}?next={{ request.path|urlencode }}">Войти</a>
+            {% endif %}
+        </div>
+        <div class="list-stack" style="margin-top: 18px;">
+            {% for review in reviews %}
+                {% include 'partials/_review_block.html' with review=review %}
+            {% empty %}
+            <article class="surface-card empty-card">Пока нет отзывов для этой книги.</article>
+            {% endfor %}
+        </div>
+    </div>
+    <div>
+        <div class="section-heading inline-heading">
+            <div>
+                <span class="eyebrow">Похожие книги</span>
+                <h2>Рекомендации по атмосфере</h2>
+            </div>
+        </div>
+        <div class="list-stack">
+            {% for recommendation in related_books %}
+                {% include 'partials/_recommendation_card.html' with recommendation=recommendation %}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

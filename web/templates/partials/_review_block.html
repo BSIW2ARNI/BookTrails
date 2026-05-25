@@ -1,0 +1,14 @@
+<article class="surface-card review-block">
+    <div class="review-head">
+        <div>
+            <h3>{{ review.author }}</h3>
+            <p class="muted">{{ review.created_at }}</p>
+        </div>
+        <div class="review-meta">
+            <span class="rating-pill">★ {{ review.rating }}</span>
+            <span class="status-pill">{{ review.moderation_status }}</span>
+            {% if review.is_owner %}<span class="status-pill success">Ваш отзыв</span>{% endif %}
+        </div>
+    </div>
+    <p>{{ review.text }}</p>
+</article>

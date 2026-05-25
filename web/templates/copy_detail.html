@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% block title %}Экземпляр {{ copy.copy_code }} — BookTrail{% endblock %}
+{% block content %}
+<section class="section compact-top">
+    <div class="detail-layout">
+        <div class="surface-card">
+            <span class="eyebrow">Страница экземпляра</span>
+            <h1>{{ book.title }}</h1>
+            <p class="meta-line">{{ book.author_names|join:', ' }} · {{ copy.created_at|date:"d.m.Y H:i" }}</p>
+            {% include 'partials/_copy_badge.html' with copy=copy %}
+            <div class="nfc-panel">
+                <div>
+                    <p class="panel-label">NFC-метка</p>
+                    <strong>{{ nfc.status }}</strong>
+                    <p class="mono muted">{% if nfc.tag_uid %}{{ nfc.tag_uid }}{% else %}UID пока отсутствует{% endif %}</p>
+                </div>
+                {% if request.user.is_authenticated %}
+                <div class="hero-actions">
+                    {% if active_bind %}
+                    <form method="post">
+                        {% csrf_token %}
+                        <button class="btn btn-danger" type="submit" name="action" value="unbind_tag">Отвязать метку</button>
+                    </form>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        <aside class="surface-card side-note-card">
+            <span class="eyebrow">Быстрый доступ</span>
+            <h3>Связанная книга</h3>
+            <p>Вернитесь к карточке книги, чтобы посмотреть отзывы и похожие издания.</p>
+            <a class="btn btn-secondary" href="{% url 'web:book_detail' book.id %}">Открыть книгу</a>
+        </aside>
+    </div>
+</section>
+
+<section class="section two-column-section" id="copy-actions">
+    <div>
+        <div class="section-heading inline-heading">
+            <div>
+                <span class="eyebrow">NFC</span>
+                <h2>Привязка метки</h2>
+            </div>
+        </div>
+        <article class="surface-card form-card">
+            {% if request.user.is_authenticated %}
+            <form class="stacked-form" method="post" novalidate>
+                {% csrf_token %}
+                <input type="hidden" name="action" value="bind_tag">
+                {% if nfc_bind_form.non_field_errors %}
+                <div class="form-errors">
+                    {% for error in nfc_bind_form.non_field_errors %}
+                    <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <label class="input-group">
+                    <span>{{ nfc_bind_form.tag_uid.label }}</span>
+                    {{ nfc_bind_form.tag_uid }}
+                    {% for error in nfc_bind_form.tag_uid.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+                </label>
+                <button class="btn btn-primary" type="submit">Привязать метку</button>
+            </form>
+            {% else %}
+            <p class="muted">Войдите в аккаунт, чтобы привязывать NFC-метки к экземплярам.</p>
+            <a class="btn btn-primary" href="{% url 'web:auth_login' %}?next={{ request.path|urlencode }}">Войти</a>
+            {% endif %}
+        </article>
+    </div>
+    <div>
+        <div class="section-heading inline-heading">
+            <div>
+                <span class="eyebrow">Новое событие</span>
+                <h2>Добавить запись в маршрут</h2>
+            </div>
+        </div>
+        <article class="surface-card form-card">
+            {% if request.user.is_authenticated %}
+            <form class="stacked-form" method="post" novalidate>
+                {% csrf_token %}
+                <input type="hidden" name="action" value="add_move">
+                {% if move_form.non_field_errors %}
+                <div class="form-errors">
+                    {% for error in move_form.non_field_errors %}
+                    <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <label class="input-group">
+                    <span>{{ move_form.event_type.label }}</span>
+                    {{ move_form.event_type }}
+                    {% for error in move_form.event_type.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+                </label>
+                <label class="input-group">
+                    <span>{{ move_form.place_text.label }}</span>
+                    {{ move_form.place_text }}
+                    {% for error in move_form.place_text.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+                </label>
+                <label class="input-group">
+                    <span>{{ move_form.text.label }}</span>
+                    {{ move_form.text }}
+                    {% for error in move_form.text.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+                </label>
+                <button class="btn btn-primary" type="submit">Добавить событие</button>
+            </form>
+            {% else %}
+            <p class="muted">Войдите в аккаунт, чтобы фиксировать события по экземпляру.</p>
+            <a class="btn btn-primary" href="{% url 'web:auth_login' %}?next={{ request.path|urlencode }}">Войти</a>
+            {% endif %}
+        </article>
+    </div>
+</section>
+
+<section class="section">
+    <div class="section-heading inline-heading">
+        <div>
+            <span class="eyebrow">История перемещений</span>
+            <h2>Сигналы и остановки экземпляра</h2>
+        </div>
+    </div>
+    <div class="list-stack">
+        {% for event in movements %}
+            {% include 'partials/_event_chip.html' with event=event %}
+        {% empty %}
+        <article class="surface-card empty-card">Для этого экземпляра пока нет событий.</article>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

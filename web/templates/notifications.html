@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Уведомления — BookTrail{% endblock %}
+{% block content %}
+<section class="section compact-top">
+    <div class="section-heading inline-heading">
+        <div>
+            <span class="eyebrow">Уведомления</span>
+            <h1>Следите за новыми событиями, отзывами и подсказками.</h1>
+        </div>
+        <form method="post">
+            {% csrf_token %}
+            <button class="btn btn-secondary" type="submit" name="action" value="mark_all_read">Отметить всё как прочитанное</button>
+        </form>
+    </div>
+    <div class="list-stack">
+        {% for notification in notifications %}
+            {% include 'partials/_notification_item.html' with notification=notification %}
+        {% empty %}
+        <article class="surface-card empty-card">У вас пока нет уведомлений.</article>
+        {% endfor %}
+    </div>
+</section>
+
+{% endblock %}

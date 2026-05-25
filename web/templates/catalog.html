@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}Каталог — BookTrail{% endblock %}
+{% block content %}
+<section class="section compact-top">
+    <div class="section-heading">
+        <span class="eyebrow">Каталог книг</span>
+        <h1>Найдите книгу по настроению, жанру и языку.</h1>
+    </div>
+    <form class="surface-card filter-panel" method="get">
+        <div class="search-row">
+            <label class="input-group wide">
+                <span>Поиск</span>
+                <input type="search" name="q" value="{{ query }}" placeholder="Название, автор или ISBN...">
+            </label>
+            <button class="btn btn-primary" type="submit">Искать</button>
+        </div>
+        <div class="filter-row">
+            <label class="input-group">
+                <span>Жанр</span>
+                <select name="genre">
+                    <option value="">Все жанры</option>
+                    {% for name, slug in genres %}<option value="{{ slug }}" {% if selected_genre == slug %}selected{% endif %}>{{ name }}</option>{% endfor %}
+                </select>
+            </label>
+            <label class="input-group">
+                <span>Язык</span>
+                <select name="language">
+                    <option value="">Все языки</option>
+                    {% for name, code in languages %}<option value="{{ code }}" {% if selected_language == code %}selected{% endif %}>{{ name }}</option>{% endfor %}
+                </select>
+            </label>
+            <div class="hero-actions">
+                <button class="btn btn-secondary" type="submit">Применить</button>
+                <a class="btn btn-ghost" href="{% url 'web:catalog' %}">Сбросить</a>
+            </div>
+        </div>
+    </form>
+    <div class="card-grid book-grid">
+        {% for book in books %}
+            {% include 'partials/_book_card.html' with book=book %}
+        {% empty %}
+        <article class="surface-card empty-card">
+            <h3>Ничего не найдено</h3>
+            <p class="muted">Попробуйте изменить поисковую фразу, жанр или язык.</p>
+        </article>
+        {% endfor %}
+    </div>
+</section>
+
+{% endblock %}

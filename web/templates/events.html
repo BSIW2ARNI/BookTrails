@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}События — BookTrail{% endblock %}
+{% block content %}
+<section class="section compact-top">
+    <div class="section-heading">
+        <span class="eyebrow">Лента событий</span>
+        <h1>Хронология маршрутов книг и экземпляров.</h1>
+    </div>
+    <div class="surface-card filter-panel">
+        <div class="filter-chips">
+            <span class="chip active">Все типы</span>
+            <span class="chip">Сканирование</span>
+            <span class="chip">Передача</span>
+            <span class="chip">Ожидание</span>
+            <span class="chip">Подготовка</span>
+        </div>
+    </div>
+    <div class="list-stack events-detailed">
+        {% for event in events %}
+        <article class="surface-card event-feed-item">
+            <div class="event-feed-top">
+                <div>
+                    <span class="event-type">{{ event.type }}</span>
+                    <h3>{{ event.book_title }}</h3>
+                    <p class="muted">{{ event.time }} · {{ event.place }}</p>
+                </div>
+                <div class="event-links">
+                    <a class="text-link" href="{% url 'web:book_detail' event.book_id %}">Книга</a>
+                    <a class="text-link" href="{% url 'web:copy_detail' event.copy_id %}">Экземпляр</a>
+                </div>
+            </div>
+            <p>{{ event.comment }}</p>
+        </article>
+        {% endfor %}
+    </div>
+    {% if page_obj %}
+    <div class="hero-actions" style="margin-top: 18px;">
+        {% if page_obj.has_previous %}
+            <a class="btn btn-secondary" href="?page={{ page_obj.previous_page_number }}{% if request.GET.type %}&type={{ request.GET.type }}{% endif %}">Назад</a>
+        {% endif %}
+        {% if page_obj.has_next %}
+            <a class="btn btn-secondary" href="?page={{ page_obj.next_page_number }}{% if request.GET.type %}&type={{ request.GET.type }}{% endif %}">Вперёд</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</section>
+
+{% endblock %}

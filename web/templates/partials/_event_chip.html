@@ -1,0 +1,12 @@
+<article class="surface-card event-chip">
+    <div class="event-chip-marker"></div>
+    <div class="event-chip-body">
+        <div class="event-chip-head">
+            <span class="event-type">{% firstof event.type event.event_type %}</span>
+            <span class="muted">{% firstof event.time event.date_time %}</span>
+        </div>
+        <p><strong>{% firstof event.place event.place_text %}</strong></p>
+        <p class="muted">{% firstof event.comment event.text %}</p>
+        <span class="micro-label">Источник: {% firstof event.source 'Маршрут BookTrail' %}</span>
+    </div>
+</article>

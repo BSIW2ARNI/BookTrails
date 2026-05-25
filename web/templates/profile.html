@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% block title %}Профиль — BookTrail{% endblock %}
+{% block content %}
+<section class="section compact-top">
+    <div class="detail-layout">
+        <article class="surface-card profile-card">
+            <div class="profile-header">
+                <div class="avatar-badge">{{ user.avatar }}</div>
+                <div>
+                    <span class="eyebrow">Профиль</span>
+                    <h1>{{ user.display_name }}</h1>
+                    <p class="muted">{{ user.email }} · {{ user.status }}</p>
+                </div>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card"><strong>{{ user.stats.tracked_books }}</strong><span>книг в маршруте</span></div>
+                <div class="stat-card"><strong>{{ user.stats.reviews }}</strong><span>отзывов</span></div>
+                <div class="stat-card"><strong>{{ user.stats.events_logged }}</strong><span>событий</span></div>
+                <div class="stat-card"><strong>{{ user.stats.recommendation_match }}</strong><span>совпадение профиля</span></div>
+            </div>
+        </article>
+        <aside class="surface-card settings-card" id="profile-settings">
+            <span class="eyebrow">Приватность</span>
+            <h3>Редактирование профиля</h3>
+            <form class="stacked-form" method="post" novalidate>
+                {% csrf_token %}
+                {% if profile_form.non_field_errors %}
+                <div class="form-errors">
+                    {% for error in profile_form.non_field_errors %}
+                    <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <label class="input-group">
+                    <span>{{ profile_form.full_name.label }}</span>
+                    {{ profile_form.full_name }}
+                    {% for error in profile_form.full_name.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+                </label>
+                <label class="input-group">
+                    <span>{{ profile_form.email.label }}</span>
+                    {{ profile_form.email }}
+                    {% for error in profile_form.email.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+                </label>
+                <div class="form-grid two-columns">
+                    <label class="input-group">
+                        <span>{{ profile_form.avatar.label }}</span>
+                        {{ profile_form.avatar }}
+                        {% for error in profile_form.avatar.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+                    </label>
+                    <label class="input-group">
+                        <span>{{ profile_form.status.label }}</span>
+                        {{ profile_form.status }}
+                        {% for error in profile_form.status.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+                    </label>
+                </div>
+                <div class="checkbox-stack">
+                    <label class="check-row">{{ profile_form.show_profile }} <span>{{ profile_form.show_profile.label }}</span></label>
+                    <label class="check-row">{{ profile_form.share_reviews }} <span>{{ profile_form.share_reviews.label }}</span></label>
+                    <label class="check-row">{{ profile_form.nfc_visibility }} <span>{{ profile_form.nfc_visibility.label }}</span></label>
+                </div>
+                <button class="btn btn-primary" type="submit">Сохранить изменения</button>
+            </form>
+        </aside>
+    </div>
+</section>
+
+<section class="section two-column-section">
+    <div>
+        <div class="section-heading inline-heading">
+            <div>
+                <span class="eyebrow">Активные сессии</span>
+                <h2>Устройства и входы</h2>
+            </div>
+        </div>
+        <div class="list-stack">
+            {% for session in user.sessions %}
+            <article class="surface-card session-card">
+                <div>
+                    <h3>{{ session.device }}</h3>
+                    <p class="muted">{{ session.location }} · {{ session.last_seen }}</p>
+                </div>
+                <span class="status-pill {% if session.current %}success{% endif %}">{% if session.current %}Текущая{% else %}Недавняя{% endif %}</span>
+            </article>
+            {% empty %}
+            <article class="surface-card empty-card">Активные сессии пока не зафиксированы.</article>
+            {% endfor %}
+        </div>
+    </div>
+    <div>
+        <div class="section-heading inline-heading">
+            <div>
+                <span class="eyebrow">Недавние отзывы</span>
+                <h2>Ваш голос в маршрутах</h2>
+            </div>
+        </div>
+        <div class="list-stack">
+            {% for review in recent_reviews %}
+                {% include 'partials/_review_block.html' with review=review %}
+            {% empty %}
+            <article class="surface-card empty-card">Вы еще не оставляли отзывов.</article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{% endblock %}

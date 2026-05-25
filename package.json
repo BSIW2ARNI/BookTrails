@@ -1,0 +1,23 @@
+{
+  "name": "booktrail",
+  "version": "1.0.0",
+  "description": "BookTrail — прототип (UI-first) веб‑сервиса для bookcrossing/трекинга экземпляров книг с упором на NFC‑сценарии: «экземпляр → события перемещения → рекомендации → профиль читателя».",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zyf2021/BookTrail.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zyf2021/BookTrail/issues"
+  },
+  "homepage": "https://github.com/zyf2021/BookTrail#readme",
+  "dependencies": {
+    "html2canvas": "^1.4.1"
+  }
+}

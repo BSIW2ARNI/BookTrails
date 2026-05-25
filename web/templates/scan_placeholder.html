@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block title %}Сканирование — BookTrail{% endblock %}
+{% block content %}
+<section class="section compact-top">
+    <article class="surface-card placeholder-card">
+        <span class="eyebrow">Сканирование</span>
+        <h1>Ручной MVP для scan-сценария</h1>
+        <p>В веб-версии можно зафиксировать сканирование вручную: по коду экземпляра, по UID NFC-метки или по обоим значениям сразу.</p>
+        <form class="stacked-form" method="post" novalidate style="margin-top: 24px;">
+            {% csrf_token %}
+            {% if scan_form.non_field_errors %}
+            <div class="form-errors">
+                {% for error in scan_form.non_field_errors %}
+                <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+            <div class="form-grid two-columns">
+                <label class="input-group">
+                    <span>{{ scan_form.copy_code.label }}</span>
+                    {{ scan_form.copy_code }}
+                    {% for error in scan_form.copy_code.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+                </label>
+                <label class="input-group">
+                    <span>{{ scan_form.tag_uid.label }}</span>
+                    {{ scan_form.tag_uid }}
+                    {% for error in scan_form.tag_uid.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+                </label>
+            </div>
+            <label class="input-group">
+                <span>{{ scan_form.place_text.label }}</span>
+                {{ scan_form.place_text }}
+                {% for error in scan_form.place_text.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+            </label>
+            <label class="input-group">
+                <span>{{ scan_form.text.label }}</span>
+                {{ scan_form.text }}
+                {% for error in scan_form.text.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+            </label>
+            <div class="hero-actions">
+                <button class="btn btn-primary" type="submit">Сохранить сканирование</button>
+                <a class="btn btn-secondary" href="{% url 'web:events' %}">К событиям</a>
+            </div>
+        </form>
+        {% if scans %}
+        <div class="section-heading inline-heading" style="margin-top: 24px;">
+            <div>
+                <span class="eyebrow">Последние сканирования</span>
+                <h2>Ваши последние NFC-события</h2>
+            </div>
+        </div>
+        <div class="list-stack">
+            {% for scan in scans %}
+            <article class="surface-card event-feed-item">
+                <div class="event-feed-top">
+                    <div>
+                        <span class="event-type">Сканирование</span>
+                        <h3 class="mono">{{ scan.tag_uid }}</h3>
+                        <p class="muted">{{ scan.date_time }} · {{ scan.place }}</p>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </article>
+</section>
+{% endblock %}

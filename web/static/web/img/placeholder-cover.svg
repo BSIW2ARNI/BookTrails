@@ -1,0 +1,20 @@
+<svg width="480" height="640" viewBox="0 0 480 640" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="480" height="640" rx="32" fill="#0F1626"/>
+  <rect x="32" y="32" width="416" height="576" rx="24" fill="#121B2E" stroke="#22304D" stroke-width="4"/>
+  <path d="M104 156C104 132.804 122.804 114 146 114H335C358.196 114 377 132.804 377 156V484C377 507.196 358.196 526 335 526H146C122.804 526 104 507.196 104 484V156Z" fill="url(#paint0_linear_1_3)" fill-opacity="0.12"/>
+  <circle cx="160" cy="182" r="14" fill="#00E5FF"/>
+  <path d="M160 182H320" stroke="#00E5FF" stroke-width="3" stroke-linecap="round"/>
+  <path d="M160 182C248 182 240 318 320 318" stroke="#2D6BFF" stroke-width="5" stroke-linecap="round"/>
+  <path d="M160 182C248 182 228 432 320 432" stroke="#FF2DAA" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="320" cy="318" r="16" fill="#2D6BFF"/>
+  <circle cx="320" cy="432" r="16" fill="#FF2DAA"/>
+  <text x="104" y="92" fill="#EAF0FF" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="700">BOOKTRAIL</text>
+  <text x="104" y="560" fill="#9DB0D8" font-family="JetBrains Mono, monospace" font-size="24">BOOK IN MOTION</text>
+  <defs>
+    <linearGradient id="paint0_linear_1_3" x1="128" y1="114" x2="385" y2="526" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2D6BFF"/>
+      <stop offset="0.52" stop-color="#00E5FF"/>
+      <stop offset="1" stop-color="#FF2DAA"/>
+    </linearGradient>
+  </defs>
+</svg>

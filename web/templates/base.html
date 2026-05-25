@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}BookTrail{% endblock %}</title>
+    <meta name="description" content="BookTrail — платформа буккроссинга с NFC-маршрутами и умными рекомендациями.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'web/css/styles.css' %}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <div class="app-shell">
+        {% include 'partials/_navbar.html' %}
+        <main class="page-content">
+            {% if messages %}
+            <section class="section compact-top flash-stack">
+                {% for message in messages %}
+                <article class="flash-message flash-{{ message.tags|default:'info' }}">{{ message }}</article>
+                {% endfor %}
+            </section>
+            {% endif %}
+            {% block content %}{% endblock %}
+        </main>
+        {% include 'partials/_footer.html' %}
+    </div>
+    <form style="display:none;">{% csrf_token %}</form>
+    <script src="{% static 'web/js/app.js' %}"></script>
+    <script src="{% static 'vendor/html2canvas.min.js' %}"></script>
+    <script src="{% static 'web/js/auto_page_screenshot.js' %}"></script>
+</body>
+</html>

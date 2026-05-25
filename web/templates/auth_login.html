@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}Вход — BookTrail{% endblock %}
+{% block content %}
+<section class="auth-section">
+    <article class="surface-card auth-card">
+        <span class="eyebrow">Вход</span>
+        <h1>Вернитесь к маршрутам книг</h1>
+        <form class="auth-form" method="post" novalidate>
+            {% csrf_token %}
+            {% if next_url %}
+            <input type="hidden" name="next" value="{{ next_url }}">
+            {% endif %}
+            {% if form.non_field_errors %}
+            <div class="form-errors">
+                {% for error in form.non_field_errors %}
+                <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+            <label class="input-group">
+                <span>{{ form.login.label }}</span>
+                {{ form.login }}
+                {% for error in form.login.errors %}
+                <span class="field-error">{{ error }}</span>
+                {% endfor %}
+            </label>
+            <label class="input-group">
+                <span>{{ form.password.label }}</span>
+                {{ form.password }}
+                {% for error in form.password.errors %}
+                <span class="field-error">{{ error }}</span>
+                {% endfor %}
+            </label>
+            <button class="btn btn-primary" type="submit">Войти</button>
+        </form>
+        <p class="muted center">Нет аккаунта? <a class="text-link" href="{% url 'web:auth_register' %}{% if next_url %}?next={{ next_url|urlencode }}{% endif %}">Создать профиль</a></p>
+    </article>
+</section>
+
+{% endblock %}
